@@ -1,5 +1,5 @@
-import sys
 import random
+import sys
 from collections import deque
 from typing import Deque, List, Set, Tuple
 
@@ -41,7 +41,9 @@ class Snake:
 
     def __init__(self) -> None:
         cx, cy = GRID_COLS // 2, GRID_ROWS // 2
-        self._body: Deque[Tuple[int, int]] = deque([(cx, cy), (cx - 1, cy), (cx - 2, cy)])
+        self._body: Deque[Tuple[int, int]] = deque(
+            [(cx, cy), (cx - 1, cy), (cx - 2, cy)]
+        )
         self._body_set: Set[Tuple[int, int]] = set(self._body)
         self._direction: Tuple[int, int] = RIGHT
         self._pending_direction: Tuple[int, int] = RIGHT
@@ -125,11 +127,17 @@ class Food:
         # Fast path: if snake is small, retry a few times
         if len(occupied) < total_cells // 3:
             while True:
-                candidate = (random.randrange(GRID_COLS), random.randrange(GRID_ROWS))
+                candidate = (random.randrange(GRID_COLS),
+                             random.randrange(GRID_ROWS))
                 if candidate not in occupied:
                     return candidate
         # Otherwise compute free list once
-        free_cells = [(x, y) for y in range(GRID_ROWS) for x in range(GRID_COLS) if (x, y) not in occupied]
+        free_cells = [
+            (x, y)
+            for y in range(GRID_ROWS)
+            for x in range(GRID_COLS)
+            if (x, y) not in occupied
+        ]
         return random.choice(free_cells) if free_cells else (-1, -1)
 
     def relocate(self, snake: Snake) -> None:
@@ -154,7 +162,9 @@ def draw_snake(surface: pygame.Surface, snake: Snake) -> None:
 def draw_food(surface: pygame.Surface, food: Food) -> None:
     fx, fy = grid_to_px(food.position)
     padding = CELL_SIZE // 6
-    rect = pygame.Rect(fx + padding, fy + padding, CELL_SIZE - 2 * padding, CELL_SIZE - 2 * padding)
+    rect = pygame.Rect(
+        fx + padding, fy + padding, CELL_SIZE - 2 * padding, CELL_SIZE - 2 * padding
+    )
     pygame.draw.rect(surface, FOOD_COLOR, rect, border_radius=6)
 
 
@@ -231,7 +241,9 @@ def main() -> None:
 
         render_text(screen, f"Score: {score}", 20, 16)
         if game_over:
-            render_text(screen, "Game Over - Press Space to Restart", 22, SCREEN_HEIGHT // 2)
+            render_text(
+                screen, "Game Over - Press Space to Restart", 22, SCREEN_HEIGHT // 2
+            )
 
         pygame.display.flip()
         clock.tick(speed)
